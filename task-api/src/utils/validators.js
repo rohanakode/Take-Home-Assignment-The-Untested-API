@@ -5,6 +5,7 @@ const validateCreateTask = (body) => {
   if (!body.title || typeof body.title !== 'string' || body.title.trim() === '') {
     return 'title is required and must be a non-empty string';
   }
+  // BUG: Truthy check skips validation when status/priority is "" (empty string is falsy)
   if (body.status && !VALID_STATUSES.includes(body.status)) {
     return `status must be one of: ${VALID_STATUSES.join(', ')}`;
   }
@@ -21,6 +22,7 @@ const validateUpdateTask = (body) => {
   if (body.title !== undefined && (typeof body.title !== 'string' || body.title.trim() === '')) {
     return 'title must be a non-empty string';
   }
+  // BUG: Same truthy check issue — empty string status/priority bypasses validation
   if (body.status && !VALID_STATUSES.includes(body.status)) {
     return `status must be one of: ${VALID_STATUSES.join(', ')}`;
   }
